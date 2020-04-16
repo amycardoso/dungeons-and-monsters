@@ -1,4 +1,5 @@
 import React from 'react';
+import { TILE_SIZE } from "../../settings/constants";
 
 import './index.css';
 
@@ -6,7 +7,10 @@ const Hero = () => {
     return (
         <div 
             style={{
-                width: 48,
+                position: 'absolute',
+                bottom: 48 * 2,
+                left: 48 * 1,
+                width: TILE_SIZE,
                 height: 100,
                 backgroundImage:"url(./assets/HERO.png)",
                 backgroundRepeat: 'no-repeat',
