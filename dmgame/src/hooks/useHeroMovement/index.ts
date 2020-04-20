@@ -10,6 +10,9 @@ function useHeroMovement(initialPosition: { x: number; y: number; }) {
   useEventListener('keydown', (event: React.KeyboardEvent<HTMLDivElement>) => {
     const direction = event.key as EDirection;
 
+    if(direction.indexOf('Arrow') === -1)
+      return;
+
     const nextPosition = handleNextPosition(direction, positionState);
     updatePositionState(nextPosition);
     updateDirectionState(direction);
