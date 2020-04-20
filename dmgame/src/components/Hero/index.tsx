@@ -13,7 +13,7 @@ const Hero = () => {
     const [positionState, updatePositionState] = React.useState(initialPosition);
     const [direction, updateDirectionState] = React.useState('RIGHT');
 
-    useEventListener("keydown", (event: any) => {
+    useEventListener("keydown", (event: React.KeyboardEvent<HTMLDivElement>) => {
         switch(event.key) {
             case 'ArrowLeft':
                 updatePositionState({ x: positionState.x - 1, y: positionState.y });
