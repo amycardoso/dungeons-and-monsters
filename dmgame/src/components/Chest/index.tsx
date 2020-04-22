@@ -8,7 +8,7 @@ const Chest = () => {
         <div
             style={{
                 position: "absolute",
-                bottom: TILE_SIZE * 8,
+                top: TILE_SIZE * 8,
                 left: TILE_SIZE * 3,
                 width: TILE_SIZE,
                 height: TILE_SIZE,

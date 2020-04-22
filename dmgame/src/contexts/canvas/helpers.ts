@@ -1,7 +1,7 @@
 import { EDirection } from "../../settings/constants";
 
 export function handleNextPosition(direction: EDirection, position: { x: any; y: any; }) {
-  switch(direction) {
+  switch (direction) {
     case EDirection.LEFT:
       return { x: position.x - 1, y: position.y };
 
@@ -14,7 +14,7 @@ export function handleNextPosition(direction: EDirection, position: { x: any; y:
     case EDirection.UP:
       return { x: position.x, y: position.y + 1 };
   }
-} 
+}
 
 /**
  * ALL VALUE 1 IS EQUAL TO WALL

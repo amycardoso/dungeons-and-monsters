@@ -2,16 +2,20 @@ import React from 'react';
 import { TILE_SIZE, HEAD_OFFSET, EDirection } from '../../settings/constants';
 
 import './index.css';
-import useEnemymovement from '../../hooks/useEnemyMovement';
+import useEnemyMovement from '../../hooks/useEnemyMovement';
 
-const MiniDemon = () => {
-  const movement = useEnemymovement({ x: 10, y: 5 });
+interface IProps {
+  initialPosition: { x: number; y: number }
+};
+
+const MiniDemon = (props: IProps) => {
+  const movement = useEnemyMovement(props.initialPosition);
 
   return (
     <div
       style={{
         position: 'absolute',
-        bottom: TILE_SIZE * movement.position.y,
+        top: TILE_SIZE * movement.position.y,
         left: TILE_SIZE * movement.position.x,
         width: TILE_SIZE,
         height: TILE_SIZE + HEAD_OFFSET,

@@ -3,6 +3,7 @@ import './App.css';
 
 import Board from './Board';
 import { GAME_SIZE } from '../settings/constants';
+import Debugger from './Debugger';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           height: GAME_SIZE,
         }}
       >
+        <Debugger />
         <Board />
       </div>
     </div>
