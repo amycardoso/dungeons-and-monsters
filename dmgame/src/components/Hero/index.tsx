@@ -1,34 +1,39 @@
-import React, { useState } from "react";
-import { TILE_SIZE, HEAD_OFFSET, EDirection } from "../../settings/constants";
+import React from 'react';
+
+import { TILE_SIZE, HEAD_OFFSET, EDirection } from '../../settings/constants';
 
 import './index.css';
-import useHeroMovement from "../../hooks/useHeroMovement";
+import useHeroMovement from '../../hooks/useHeroMovement';
 
-const initialPosition = {
-    x: 1,
-    y: 2
-};
+// const moviment = {
+//   position: { x: 5, y: 5 },
+//   direction: EDirection.RIGHT,
+// };
 
-const Hero = () => {
-    const {position, direction} = useHeroMovement(initialPosition);
-    
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                top: TILE_SIZE * position.y - HEAD_OFFSET,
-                left: TILE_SIZE * position.x,
-                width: TILE_SIZE,
-                height: TILE_SIZE + HEAD_OFFSET,
-                backgroundImage: "url(./assets/HERO.png)",
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: `0 -${TILE_SIZE - HEAD_OFFSET}px`,
-                animation: 'hero-animation 1s steps(4) infinite',
-                transform: `scaleX(${direction === EDirection.RIGHT ? 1 : -1})`,
-                zIndex: 1
-            }}
-        />
-    );
+interface IProps {
+  initialPosition: { x: number; y: number }
+}
+
+const Hero = (props: IProps) => {
+  const { position, direction } = useHeroMovement(props.initialPosition);
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: TILE_SIZE * position.y - HEAD_OFFSET,
+        left: TILE_SIZE * position.x,
+        width: TILE_SIZE,
+        height: TILE_SIZE + HEAD_OFFSET,
+        backgroundImage: "url(./assets/HERO.png)",
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: `0px -${TILE_SIZE - HEAD_OFFSET}px`,
+        animation: 'hero-animation 1s steps(4) infinite',
+        transform: `scaleX(${direction === EDirection.RIGHT ? 1 : -1})`,
+        zIndex: 1
+      }}
+    />
+  )
 }
 
 export default Hero;
