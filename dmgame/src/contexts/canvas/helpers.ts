@@ -58,3 +58,21 @@ export const canvas = [
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
   [WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL]
 ];
+
+export function checkValidMovement(nextPosition: { y: number; x: number; }) {
+  const canvasValue = canvas[nextPosition.y][nextPosition.x];
+
+  if (canvasValue === ECanvas.WALL) {
+    return false;
+  }
+
+  if (canvasValue === ECanvas.CHEST) {
+    console.log('PISOU NO BAU');
+  }
+
+  if (canvasValue === ECanvas.TRAP) {
+    console.log('PISOU NA TRAP');
+  }
+
+  return true;
+}
