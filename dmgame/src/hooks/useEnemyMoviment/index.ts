@@ -1,9 +1,10 @@
 import useInterval from '@use-it/interval';
 import React from 'react';
-import { EDirection } from '../../settings/constants';
-import { handleNextPosition, checkValidMovement } from '../../contexts/canvas/helpers';
+import { EDirection, EWalker } from '../../settings/constants';
+import { CanvasContext } from '../../contexts/canvas';
 
-function useEnemyMovement(initialPosition: any) {
+function useEnemyMoviment(initialPosition) {
+  const canvasContex = React.useContext(CanvasContext);
   const [positionState, updatePositionState] = React.useState(initialPosition);
   const [direction, updateDirectionState] = React.useState(EDirection.RIGHT);
 
@@ -12,12 +13,16 @@ function useEnemyMovement(initialPosition: any) {
     var directionArray = Object.values(EDirection);
     const randomDirection = directionArray[random];
 
-    const nextPosition = handleNextPosition(randomDirection, positionState);
-    const isValidMovement = checkValidMovement(nextPosition);
+    const moviment = canvasContex.updateCanvas(randomDirection, positionState, EWalker.ENEMY);
 
-    if (isValidMovement) {
+    if (moviment.nextMove.valid) {
       updateDirectionState(randomDirection);
-      updatePositionState(nextPosition);
+      updatePositionState(moviment.nextPosition);
+    }
+
+    if (moviment.nextMove.dead) {
+      alert('Você morreu');
+      window.location.reload();
     }
   }, 2000);
 
@@ -27,4 +32,4 @@ function useEnemyMovement(initialPosition: any) {
   }
 }
 
-export default useEnemyMovement;
+export default useEnemyMoviment;

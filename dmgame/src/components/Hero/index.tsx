@@ -3,7 +3,7 @@ import React from 'react';
 import { TILE_SIZE, HEAD_OFFSET, EDirection } from '../../settings/constants';
 
 import './index.css';
-import useHeroMovement from '../../hooks/useHeroMovement';
+import useHeroMoviment from '../../hooks/useHeroMoviment';
 
 // const moviment = {
 //   position: { x: 5, y: 5 },
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const Hero = (props: IProps) => {
-  const { position, direction } = useHeroMovement(props.initialPosition);
+  const { position, direction } = useHeroMoviment(props.initialPosition);
 
   return (
     <div
