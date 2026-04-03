@@ -28,6 +28,8 @@ function useHeroMoviment(initialPosition: { x: number; y: number }) {
       return;
     }
 
+    event.preventDefault();
+
     const moviment = canvasContext.updateCanvas(direction, positionState, EWalker.HERO);
 
     if (moviment.nextMove.valid) {
