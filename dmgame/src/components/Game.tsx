@@ -1,10 +1,10 @@
 import React from 'react';
-import { GameProvider, GameContext } from '../contexts/game';
+import { GameContext } from '../contexts/game';
 import CanvasProvider from '../contexts/canvas';
 import Board from './Board';
 import ChestsProvider from '../contexts/chests';
 
-function GameInner() {
+function Game() {
   const { levelConfig } = React.useContext(GameContext);
 
   return (
@@ -14,14 +14,6 @@ function GameInner() {
         <Board />
       </ChestsProvider>
     </CanvasProvider>
-  );
-}
-
-function Game() {
-  return (
-    <GameProvider>
-      <GameInner />
-    </GameProvider>
   );
 }
 
