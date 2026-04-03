@@ -7,8 +7,14 @@ import ChestsProvider from '../contexts/chests';
 function Game() {
   const { levelConfig, currentLevel, phase } = React.useContext(GameContext);
 
+  const freshMap = React.useMemo(
+    () => levelConfig.map.map(row => [...row]),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentLevel, phase]
+  );
+
   return (
-    <CanvasProvider key={`canvas-${currentLevel}-${phase}`} initialCanvas={levelConfig.map}>
+    <CanvasProvider key={`canvas-${currentLevel}-${phase}`} initialCanvas={freshMap}>
       <ChestsProvider key={`chests-${currentLevel}-${phase}`} totalChests={levelConfig.totalChests}>
         {/* <Debugger /> */}
         <Board />

@@ -29,6 +29,15 @@ export enum ECanvas {
 };
 
 export function checkValidMoviment(canvas: number[][], nextPosition: { x: number; y: number }, walker: EWalker) {
+  if (
+    nextPosition.y < 0 ||
+    nextPosition.y >= canvas.length ||
+    nextPosition.x < 0 ||
+    nextPosition.x >= canvas[nextPosition.y].length
+  ) {
+    return { valid: false, damage: false, chest: false, door: false, powerup: false };
+  }
+
   const canvasValue = canvas[nextPosition.y][nextPosition.x];
 
   const result = walker === EWalker.HERO ? getHeroValidMoves(canvasValue) : getEnemyValidMoves(canvasValue);

@@ -6,6 +6,10 @@ interface IProps {
   initialCanvas: number[][];
 }
 
+function cloneCanvas(source: number[][]): number[][] {
+  return source.map(row => [...row]);
+}
+
 export const CanvasContext = React.createContext({
   canvas: [] as number[][],
   updateCanvas: (direction: any, currentPosition: any, walker: any) => null as any,
@@ -13,17 +17,17 @@ export const CanvasContext = React.createContext({
 });
 
 function CanvasProvider(props: IProps) {
-  const canvasRef = React.useRef(props.initialCanvas);
+  const canvasRef = React.useRef(cloneCanvas(props.initialCanvas));
 
   const [canvasState, updateCanvasState] = React.useState({
-    canvas: props.initialCanvas,
+    canvas: cloneCanvas(props.initialCanvas),
     updateCanvas: (direction: any, currentPosition: any, walker: any) => {
       const nextPosition = handleNextPosition(direction, currentPosition);
       const nextMove = checkValidMoviment(canvasRef.current, nextPosition, walker);
 
       if (nextMove.valid) {
         updateCanvasState((prevState) => {
-          const newCanvas = Object.assign([], prevState.canvas);
+          const newCanvas = cloneCanvas(prevState.canvas);
           const currentValue = newCanvas[currentPosition.y][currentPosition.x];
 
           newCanvas[currentPosition.y][currentPosition.x] = ECanvas.FLOOR;
@@ -46,7 +50,7 @@ function CanvasProvider(props: IProps) {
     },
     teleportHero: (from: { x: number; y: number }, to: { x: number; y: number }) => {
       updateCanvasState((prevState) => {
-        const newCanvas = Object.assign([], prevState.canvas);
+        const newCanvas = cloneCanvas(prevState.canvas);
 
         newCanvas[from.y][from.x] = ECanvas.FLOOR;
         newCanvas[to.y][to.x] = ECanvas.HERO;

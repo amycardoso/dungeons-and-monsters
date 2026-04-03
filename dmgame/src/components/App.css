@@ -28,12 +28,12 @@
 
 @media (max-height: 1040px) {
   .game-container {
-    transform: scale(calc(100vh / 1040));
+    transform: scale(calc(100vh / 1040px));
   }
 }
 
 @media (max-width: 970px) {
   .game-container {
-    transform: scale(min(calc(100vw / 970), calc(100vh / 1040)));
+    transform: scale(min(calc(100vw / 970px), calc(100vh / 1040px)));
   }
 }

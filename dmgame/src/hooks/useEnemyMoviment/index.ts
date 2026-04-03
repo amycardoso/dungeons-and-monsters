@@ -21,14 +21,17 @@ function manhattanDistance(a: { x: number; y: number }, b: { x: number; y: numbe
   return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 }
 
-function getChaseDirection(enemyPos: { x: number; y: number }, heroPos: { x: number; y: number }): EDirection {
+function getChaseDirections(enemyPos: { x: number; y: number }, heroPos: { x: number; y: number }): [EDirection, EDirection] {
   const dx = heroPos.x - enemyPos.x;
   const dy = heroPos.y - enemyPos.y;
 
+  const primaryX = dx > 0 ? EDirection.RIGHT : EDirection.LEFT;
+  const primaryY = dy > 0 ? EDirection.DOWN : EDirection.UP;
+
   if (Math.abs(dx) > Math.abs(dy)) {
-    return dx > 0 ? EDirection.RIGHT : EDirection.LEFT;
+    return [primaryX, primaryY];
   } else {
-    return dy > 0 ? EDirection.DOWN : EDirection.UP;
+    return [primaryY, primaryX];
   }
 }
 
@@ -59,28 +62,58 @@ function useEnemyMoviment(initialPosition: { x: number; y: number }) {
     const heroPos = findHeroPosition(canvasRef.current.canvas);
     const isChasing = !!(heroPos && manhattanDistance(positionRef.current, heroPos) <= ENEMY_CHASE_RANGE);
     if (isChasing) {
-      chosenDirection = getChaseDirection(positionRef.current, heroPos!);
+      const [primaryDir, secondaryDir] = getChaseDirections(positionRef.current, heroPos!);
+      chosenDirection = primaryDir;
       if (!wasChasingRef.current) {
         play('growl');
+      }
+
+      // Try primary chase direction first
+      let moviment = canvasRef.current.updateCanvas(chosenDirection, positionRef.current, EWalker.ENEMY);
+
+      if (!moviment.nextMove.valid) {
+        // Primary blocked by wall, try secondary axis
+        chosenDirection = secondaryDir;
+        moviment = canvasRef.current.updateCanvas(chosenDirection, positionRef.current, EWalker.ENEMY);
+      }
+
+      if (!moviment.nextMove.valid) {
+        // Both axes blocked, fall back to random
+        const random = Math.floor(Math.random() * 4);
+        const directionArray = Object.values(EDirection);
+        chosenDirection = directionArray[random];
+        moviment = canvasRef.current.updateCanvas(chosenDirection, positionRef.current, EWalker.ENEMY);
+      }
+
+      wasChasingRef.current = isChasing;
+
+      if (moviment.nextMove.valid) {
+        updateDirectionState(chosenDirection);
+        updatePositionState(moviment.nextPosition);
+        positionRef.current = moviment.nextPosition;
+      }
+
+      if (moviment.nextMove.damage) {
+        gameRef.current.takeDamage();
       }
     } else {
       const random = Math.floor(Math.random() * 4);
       const directionArray = Object.values(EDirection);
       chosenDirection = directionArray[random];
-    }
 
-    wasChasingRef.current = isChasing;
+      wasChasingRef.current = isChasing;
 
-    const moviment = canvasRef.current.updateCanvas(chosenDirection, positionRef.current, EWalker.ENEMY);
+      const moviment = canvasRef.current.updateCanvas(chosenDirection, positionRef.current, EWalker.ENEMY);
 
-    if (moviment.nextMove.valid) {
-      updateDirectionState(chosenDirection);
-      updatePositionState(moviment.nextPosition);
-      positionRef.current = moviment.nextPosition;
-    }
+      if (moviment.nextMove.valid) {
+        updateDirectionState(chosenDirection);
+        updatePositionState(moviment.nextPosition);
+        positionRef.current = moviment.nextPosition;
+      }
 
-    if (moviment.nextMove.damage) {
-      gameRef.current.takeDamage();
+      if (moviment.nextMove.damage) {
+        gameRef.current.takeDamage();
+      }
     }
   }, gameRef.current.levelConfig.enemySpeed);
 
