@@ -60,5 +60,6 @@ function getEnemyValidMoves(canvasValue: number) {
     damage: canvasValue === ECanvas.HERO,
     chest: false,
     door: false,
+    powerup: false,
   }
 }

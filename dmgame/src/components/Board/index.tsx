@@ -27,7 +27,7 @@ const Board = () => {
         const canvasYX = canvasY[x];
 
         const position = { x: x, y: y };
-        const text = currentCanvas[y][x] || canvasYX;
+        const text = canvasYX;
         const key = `${x}-${y}`;
 
         if (text === ECanvas.TRAP) {

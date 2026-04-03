@@ -70,13 +70,16 @@ function useHeroMoviment(initialPosition: { x: number; y: number }) {
       play('powerup');
     }
 
+    let openedTotal = chestsRef.current.openedChests.total;
+
     if (moviment.nextMove.chest) {
       chestsRef.current.updateOpenedChests(moviment.nextPosition);
+      openedTotal += 1;
       gameRef.current.addScore(100);
       play('chest');
     }
 
-    if (chestsRef.current.totalChests === chestsRef.current.openedChests.total && moviment.nextMove.door) {
+    if (chestsRef.current.totalChests === openedTotal && moviment.nextMove.door) {
       gameRef.current.completeLevelPhase();
       play('victory');
     }

@@ -52,6 +52,17 @@ function useEnemyMoviment(initialPosition: { x: number; y: number }) {
   const gameRef = useRef(gameContext);
   gameRef.current = gameContext;
 
+  const applyMovement = (moviment: any, dir: EDirection) => {
+    if (moviment.nextMove.valid) {
+      updateDirectionState(dir);
+      updatePositionState(moviment.nextPosition);
+      positionRef.current = moviment.nextPosition;
+    }
+    if (moviment.nextMove.damage) {
+      gameRef.current.takeDamage();
+    }
+  };
+
   useInterval(function move() {
     if (gameRef.current.phase !== EGamePhase.PLAYING) {
       return;
@@ -86,16 +97,7 @@ function useEnemyMoviment(initialPosition: { x: number; y: number }) {
       }
 
       wasChasingRef.current = isChasing;
-
-      if (moviment.nextMove.valid) {
-        updateDirectionState(chosenDirection);
-        updatePositionState(moviment.nextPosition);
-        positionRef.current = moviment.nextPosition;
-      }
-
-      if (moviment.nextMove.damage) {
-        gameRef.current.takeDamage();
-      }
+      applyMovement(moviment, chosenDirection);
     } else {
       const random = Math.floor(Math.random() * 4);
       const directionArray = Object.values(EDirection);
@@ -104,16 +106,7 @@ function useEnemyMoviment(initialPosition: { x: number; y: number }) {
       wasChasingRef.current = isChasing;
 
       const moviment = canvasRef.current.updateCanvas(chosenDirection, positionRef.current, EWalker.ENEMY);
-
-      if (moviment.nextMove.valid) {
-        updateDirectionState(chosenDirection);
-        updatePositionState(moviment.nextPosition);
-        positionRef.current = moviment.nextPosition;
-      }
-
-      if (moviment.nextMove.damage) {
-        gameRef.current.takeDamage();
-      }
+      applyMovement(moviment, chosenDirection);
     }
   }, gameRef.current.levelConfig.enemySpeed);
 
