@@ -16,7 +16,7 @@ function AppContent() {
   return (
     <>
       <HUD />
-      <div style={{ position: 'relative', width: GAME_SIZE, height: GAME_SIZE }}>
+      <div className="game-board">
         <Game />
         {phase === EGamePhase.START && <StartScreen />}
         {phase === EGamePhase.GAME_OVER && <GameOverScreen />}
