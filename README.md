@@ -38,6 +38,3 @@ Open http://localhost:3000
 - TypeScript 5
 - Vite 6
 
-## Author
-
-Developed by [Amelia Alice](https://github.com/amycardoso).
