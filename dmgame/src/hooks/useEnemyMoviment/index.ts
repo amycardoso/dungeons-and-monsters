@@ -1,4 +1,4 @@
-import useInterval from '@use-it/interval';
+import { useInterval } from 'usehooks-ts';
 import React from 'react';
 import { EDirection, EWalker } from '../../settings/constants';
 import { CanvasContext } from '../../contexts/canvas';

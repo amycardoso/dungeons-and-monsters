@@ -17,6 +17,7 @@
     "usehooks-ts": "latest"
   },
   "scripts": {
+    "postinstall": "node -e \"const fs=require('fs'),p=require('path'),s=p.join('node_modules','ajv-keywords','node_modules','ajv'),t=p.join('node_modules','schema-utils','node_modules','ajv');if(!fs.existsSync(s)&&fs.existsSync(t)){fs.mkdirSync(p.dirname(s),{recursive:true});fs.cpSync(t,s,{recursive:true});console.log('Patched ajv-keywords to use ajv v8')}\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

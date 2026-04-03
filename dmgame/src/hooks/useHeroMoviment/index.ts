@@ -1,5 +1,5 @@
-import useEventListener from '@use-it/event-listener';
-import React from 'react';
+import { useEventListener } from 'usehooks-ts';
+import React, { useRef } from 'react';
 import { EDirection, EWalker } from '../../settings/constants';
 import { CanvasContext } from '../../contexts/canvas';
 import { ChestsContext } from '../../contexts/chests';
@@ -11,7 +11,9 @@ function useHeroMoviment(initialPosition) {
   const [positionState, updatePositionState] = React.useState(initialPosition);
   const [direction, updateDirectionState] = React.useState(EDirection.RIGHT);
 
-  useEventListener('keydown', (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const documentRef = useRef<Document>(document);
+
+  useEventListener('keydown', (event: KeyboardEvent) => {
     const direction = event.key as EDirection;
 
     if (direction.indexOf('Arrow') === -1) {
@@ -38,7 +40,7 @@ function useHeroMoviment(initialPosition) {
       alert('Você venceu');
       window.location.reload();
     }
-  });
+  }, documentRef);
 
   return {
     position: positionState,
