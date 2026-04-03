@@ -1,12 +1,14 @@
 import { useEventListener } from 'usehooks-ts';
 import React, { useRef } from 'react';
-import { EDirection, EWalker } from '../../settings/constants';
+import { EDirection, EGamePhase, EWalker } from '../../settings/constants';
 import { CanvasContext } from '../../contexts/canvas';
 import { ChestsContext } from '../../contexts/chests';
+import { GameContext } from '../../contexts/game';
 
 function useHeroMoviment(initialPosition) {
   const canvasContext = React.useContext(CanvasContext);
   const chestsContext = React.useContext(ChestsContext);
+  const gameContext = React.useContext(GameContext);
 
   const [positionState, updatePositionState] = React.useState(initialPosition);
   const [direction, updateDirectionState] = React.useState(EDirection.RIGHT);
@@ -14,6 +16,10 @@ function useHeroMoviment(initialPosition) {
   const documentRef = useRef<Document>(document);
 
   useEventListener('keydown', (event: KeyboardEvent) => {
+    if (gameContext.phase !== EGamePhase.PLAYING) {
+      return;
+    }
+
     const direction = event.key as EDirection;
 
     if (direction.indexOf('Arrow') === -1) {
@@ -27,18 +33,20 @@ function useHeroMoviment(initialPosition) {
       updateDirectionState(direction);
     }
 
-    if (moviment.nextMove.dead) {
-      alert('Você morreu');
-      window.location.reload();
+    if (moviment.nextMove.damage && !gameContext.isInvincible) {
+      gameContext.takeDamage();
+      // Traps are single-use: when the hero walks onto a trap, updateCanvas
+      // replaces the trap tile with the hero. When the hero moves away, the
+      // tile is set to FLOOR, effectively removing the trap from the map.
     }
 
     if (moviment.nextMove.chest) {
       chestsContext.updateOpenedChests(moviment.nextPosition);
+      gameContext.addScore(100);
     }
 
     if (chestsContext.totalChests === chestsContext.openedChests.total && moviment.nextMove.door) {
-      alert('Você venceu');
-      window.location.reload();
+      gameContext.completeLevelPhase();
     }
   }, documentRef);
 

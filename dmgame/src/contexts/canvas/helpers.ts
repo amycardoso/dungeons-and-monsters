@@ -36,8 +36,8 @@ export function checkValidMoviment(canvas: number[][], nextPosition, walker) {
 
 function getHeroValidMoves(canvasValue) {
   return {
-    valid: canvasValue === ECanvas.FLOOR || canvasValue === ECanvas.CHEST || canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON,
-    dead: canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON,
+    valid: canvasValue === ECanvas.FLOOR || canvasValue === ECanvas.CHEST || canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON || canvasValue === ECanvas.DOOR,
+    damage: canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON,
     chest: canvasValue === ECanvas.CHEST,
     door: canvasValue === ECanvas.DOOR,
   }
@@ -46,7 +46,7 @@ function getHeroValidMoves(canvasValue) {
 function getEnemyValidMoves(canvasValue) {
   return {
     valid: canvasValue === ECanvas.FLOOR || canvasValue === ECanvas.HERO,
-    dead: canvasValue === ECanvas.HERO,
+    damage: canvasValue === ECanvas.HERO,
     chest: false,
     door: false,
   }
