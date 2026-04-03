@@ -5,6 +5,7 @@ import MiniDemon from '../MiniDemon';
 import Demon from '../Demon';
 import Chest from '../Chest';
 import Trap from '../Trap';
+import PowerUp from '../PowerUp';
 import { ECanvas } from '../../contexts/canvas/helpers';
 import { CanvasContext } from '../../contexts/canvas';
 import { ChestsContext } from '../../contexts/chests';
@@ -41,6 +42,10 @@ const Board = () => {
 
         if (text === ECanvas.CHEST) {
           array.push(<Chest key={key} initialPosition={position} />)
+        }
+
+        if (text === ECanvas.POWER_UP) {
+          array.push(<PowerUp key={key} initialPosition={position} />)
         }
 
         if (text === ECanvas.HERO) {

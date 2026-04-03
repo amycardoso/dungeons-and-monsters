@@ -24,7 +24,8 @@ export enum ECanvas {
   MINI_DEMON = 4,
   DEMON = 5,
   CHEST = 6,
-  HERO = 7
+  HERO = 7,
+  POWER_UP = 8
 };
 
 export function checkValidMoviment(canvas: number[][], nextPosition, walker) {
@@ -36,10 +37,11 @@ export function checkValidMoviment(canvas: number[][], nextPosition, walker) {
 
 function getHeroValidMoves(canvasValue) {
   return {
-    valid: canvasValue === ECanvas.FLOOR || canvasValue === ECanvas.CHEST || canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON || canvasValue === ECanvas.DOOR,
+    valid: canvasValue === ECanvas.FLOOR || canvasValue === ECanvas.CHEST || canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON || canvasValue === ECanvas.DOOR || canvasValue === ECanvas.POWER_UP,
     damage: canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON,
     chest: canvasValue === ECanvas.CHEST,
     door: canvasValue === ECanvas.DOOR,
+    powerup: canvasValue === ECanvas.POWER_UP,
   }
 }
 

@@ -1,6 +1,6 @@
 import { useEventListener } from 'usehooks-ts';
 import React, { useRef } from 'react';
-import { EDirection, EGamePhase, EWalker } from '../../settings/constants';
+import { EDirection, EGamePhase, EPowerUp, EWalker } from '../../settings/constants';
 import { CanvasContext } from '../../contexts/canvas';
 import { ChestsContext } from '../../contexts/chests';
 import { GameContext } from '../../contexts/game';
@@ -38,6 +38,12 @@ function useHeroMoviment(initialPosition) {
       // Traps are single-use: when the hero walks onto a trap, updateCanvas
       // replaces the trap tile with the hero. When the hero moves away, the
       // tile is set to FLOOR, effectively removing the trap from the map.
+    }
+
+    if (moviment.nextMove.powerup) {
+      const POWER_UP_TYPES = [EPowerUp.HEART, EPowerUp.SHIELD, EPowerUp.SPEED];
+      const type = POWER_UP_TYPES[(moviment.nextPosition.x * 7 + moviment.nextPosition.y * 13) % 3];
+      gameContext.collectPowerUp(type);
     }
 
     if (moviment.nextMove.chest) {

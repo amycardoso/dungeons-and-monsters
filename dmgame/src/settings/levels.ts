@@ -8,6 +8,7 @@ const MD = ECanvas.MINI_DEMON;
 const DE = ECanvas.DEMON;
 const CH = ECanvas.CHEST;
 const HE = ECanvas.HERO;
+const PU = ECanvas.POWER_UP;
 
 export interface LevelConfig {
   name: string;
@@ -20,7 +21,7 @@ export interface LevelConfig {
 const level1Map: number[][] = [
   [WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, DR, WL, WL, WL, WL, WL, WL, WL, WL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL, WL, WL, WL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL, WL, WL, WL, WL],
+  [WL, FL, FL, FL, FL, PU, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL, WL, WL, WL, WL],
   [WL, FL, FL, WL, FL, FL, FL, FL, CH, FL, FL, WL, WL, WL, WL, WL, WL, WL, WL, WL],
   [WL, FL, FL, WL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL, WL, WL, WL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL, WL, WL, WL, WL],
@@ -44,14 +45,14 @@ const level1Map: number[][] = [
 const level2Map: number[][] = [
   [WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, DR, WL, WL, WL, WL, WL, WL],
   [WL, FL, FL, FL, FL, WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL],
-  [WL, FL, FL, FL, FL, WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL],
+  [WL, FL, FL, FL, FL, WL, FL, PU, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL],
   [WL, FL, CH, FL, FL, WL, FL, FL, WL, WL, FL, FL, FL, CH, FL, WL, WL, WL, WL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, WL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL],
   [WL, FL, FL, TR, FL, FL, FL, FL, FL, WL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL],
   [WL, FL, FL, FL, FL, FL, DE, FL, FL, FL, FL, FL, TR, FL, FL, WL, WL, WL, WL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL],
   [WL, WL, WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, FL, WL, WL, WL, WL, WL],
+  [WL, FL, FL, PU, FL, FL, FL, FL, FL, FL, FL, WL, WL, WL, FL, WL, WL, WL, WL, WL],
   [WL, FL, FL, FL, FL, MD, FL, FL, FL, FL, FL, WL, FL, FL, FL, WL, WL, WL, WL, WL],
   [WL, FL, CH, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, CH, FL, WL, WL, WL, WL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, DE, FL, FL, FL, FL, FL, FL, WL, WL, WL, WL, WL],
@@ -70,13 +71,13 @@ const level3Map: number[][] = [
   [WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, DR, DR, WL, WL, WL, WL, WL],
   [WL, FL, FL, WL, FL, FL, FL, FL, WL, FL, FL, FL, FL, FL, FL, FL, WL, FL, FL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, CH, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
+  [WL, FL, FL, FL, FL, PU, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
   [WL, FL, TR, FL, FL, FL, FL, CH, FL, FL, FL, FL, FL, FL, FL, MD, FL, FL, FL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, TR, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
   [WL, FL, FL, FL, FL, FL, MD, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, DE, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
+  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, PU, FL, FL, FL, FL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, DE, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
   [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
   [WL, FL, FL, FL, MD, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],

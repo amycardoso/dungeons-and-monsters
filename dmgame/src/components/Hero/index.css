@@ -7,3 +7,12 @@
         background-position-x: -192px;
     }
 }
+
+.hero--invincible {
+    animation: hero-flash 0.2s steps(2) infinite, hero-animation 1s steps(4) infinite;
+}
+
+@keyframes hero-flash {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
