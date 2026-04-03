@@ -25,7 +25,7 @@ const Chest = (props: IProps) => {
         left: TILE_SIZE * props.initialPosition.x,
         width: TILE_SIZE,
         height: 100,
-        backgroundImage: "url(./assets/CHEST.png)",
+        backgroundImage: "url(/assets/CHEST.png)",
         backgroundRepeat: 'no-repeat',
         animation: shouldAnimate && 'chest-animation 1s steps(2) forwards'
       }}

@@ -5,39 +5,19 @@
   "dependencies": {
     "react": "^18",
     "react-dom": "^18",
-    "react-scripts": "5",
     "typescript": "^5",
     "usehooks-ts": "^3.1.1"
   },
   "scripts": {
-    "postinstall": "node -e \"const fs=require('fs'),p=require('path'),s=p.join('node_modules','ajv-keywords','node_modules','ajv'),t=p.join('node_modules','schema-utils','node_modules','ajv');if(!fs.existsSync(s)&&fs.existsSync(t)){fs.mkdirSync(p.dirname(s),{recursive:true});fs.cpSync(t,s,{recursive:true});console.log('Patched ajv-keywords to use ajv v8')}\"",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.0",
-    "@testing-library/react": "^14",
-    "@testing-library/user-event": "^14",
-    "@types/jest": "^29",
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "vite": "^6",
+    "@vitejs/plugin-react": "^4"
   }
 }

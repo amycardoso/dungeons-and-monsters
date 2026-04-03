@@ -18,7 +18,7 @@ const Demon = (props: IProps) => {
         left: TILE_SIZE * moviment.position.x,
         width: DEMON_TILE_SIZE,
         height: DEMON_TILE_SIZE,
-        backgroundImage: "url(./assets/DEMON.png)",
+        backgroundImage: "url(/assets/DEMON.png)",
         backgroundRepeat: 'no-repeat',
         animation: 'demon-animation 1s steps(4) infinite',
         transition: 'top 0.15s ease, left 0.15s ease',

@@ -25,7 +25,7 @@ const Hero = (props: IProps) => {
         left: TILE_SIZE * position.x,
         width: TILE_SIZE,
         height: TILE_SIZE + HEAD_OFFSET,
-        backgroundImage: "url(./assets/HERO.png)",
+        backgroundImage: "url(/assets/HERO.png)",
         backgroundRepeat: 'no-repeat',
         backgroundPosition: `0px -${TILE_SIZE - HEAD_OFFSET}px`,
         transition: 'top 0.15s ease, left 0.15s ease',

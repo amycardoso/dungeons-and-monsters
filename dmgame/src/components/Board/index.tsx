@@ -77,7 +77,7 @@ const Board = () => {
     const top = minY === Infinity ? 0 : (minY * TILE_SIZE);
 
     return (
-      <img src="./assets/DOOR-OPEN.png" alt="" style={{
+      <img src="/assets/DOOR-OPEN.png" alt="" style={{
         position: "absolute",
         left,
         top,
@@ -97,7 +97,7 @@ const Board = () => {
         renderOpenedDoor()
       )}
 
-      <img src="./assets/tileset.gif" alt="" width={GAME_SIZE} height={GAME_SIZE} />
+      <img src="/assets/tileset.gif" alt="" width={GAME_SIZE} height={GAME_SIZE} />
     </div>
   );
 }
