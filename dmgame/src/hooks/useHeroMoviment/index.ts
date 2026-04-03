@@ -1,44 +1,89 @@
-import useEventListener from '@use-it/event-listener';
-import React from 'react';
-import { EDirection, EWalker } from '../../settings/constants';
+import { useEventListener } from 'usehooks-ts';
+import React, { useRef } from 'react';
+import { EDirection, EGamePhase, EPowerUp, EWalker } from '../../settings/constants';
 import { CanvasContext } from '../../contexts/canvas';
 import { ChestsContext } from '../../contexts/chests';
+import { GameContext } from '../../contexts/game';
+import { useSound } from '../useSound';
 
-function useHeroMoviment(initialPosition) {
+function useHeroMoviment(initialPosition: { x: number; y: number }) {
   const canvasContext = React.useContext(CanvasContext);
   const chestsContext = React.useContext(ChestsContext);
+  const gameContext = React.useContext(GameContext);
+  const { play } = useSound();
 
   const [positionState, updatePositionState] = React.useState(initialPosition);
   const [direction, updateDirectionState] = React.useState(EDirection.RIGHT);
 
-  useEventListener('keydown', (event: React.KeyboardEvent<HTMLDivElement>) => {
-    const direction = event.key as EDirection;
+  const positionRef = useRef(positionState);
+  positionRef.current = positionState;
 
-    if (direction.indexOf('Arrow') === -1) {
+  const canvasRef = useRef(canvasContext);
+  canvasRef.current = canvasContext;
+
+  const chestsRef = useRef(chestsContext);
+  chestsRef.current = chestsContext;
+
+  const gameRef = useRef(gameContext);
+  gameRef.current = gameContext;
+
+  const documentRef = useRef<Document>(document);
+
+  useEventListener('keydown', (event: KeyboardEvent) => {
+    if (gameRef.current.phase !== EGamePhase.PLAYING) {
       return;
     }
 
-    const moviment = canvasContext.updateCanvas(direction, positionState, EWalker.HERO);
+    const dir = event.key as EDirection;
+
+    if (dir.indexOf('Arrow') === -1) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const moviment = canvasRef.current.updateCanvas(dir, positionRef.current, EWalker.HERO);
 
     if (moviment.nextMove.valid) {
       updatePositionState(moviment.nextPosition);
-      updateDirectionState(direction);
+      positionRef.current = moviment.nextPosition;
+      updateDirectionState(dir);
+      play('footstep');
     }
 
-    if (moviment.nextMove.dead) {
-      alert('Você morreu');
-      window.location.reload();
+    if (moviment.nextMove.damage && !gameRef.current.isInvincible) {
+      gameRef.current.takeDamage();
+      play('damage');
+      // Respawn hero at initial position if still alive (health > 1 because takeDamage already decremented)
+      if (gameRef.current.health > 1) {
+        canvasRef.current.teleportHero(moviment.nextPosition, initialPosition);
+        updatePositionState(initialPosition);
+        positionRef.current = initialPosition;
+        updateDirectionState(EDirection.RIGHT);
+      }
     }
+
+    if (moviment.nextMove.powerup) {
+      const POWER_UP_TYPES = [EPowerUp.HEART, EPowerUp.SHIELD, EPowerUp.SPEED];
+      const type = POWER_UP_TYPES[(moviment.nextPosition.x * 7 + moviment.nextPosition.y * 13) % 3];
+      gameRef.current.collectPowerUp(type);
+      play('powerup');
+    }
+
+    let openedTotal = chestsRef.current.openedChests.total;
 
     if (moviment.nextMove.chest) {
-      chestsContext.updateOpenedChests(moviment.nextPosition);
+      chestsRef.current.updateOpenedChests(moviment.nextPosition);
+      openedTotal += 1;
+      gameRef.current.addScore(100);
+      play('chest');
     }
 
-    if (chestsContext.totalChests === chestsContext.openedChests.total && moviment.nextMove.door) {
-      alert('Você venceu');
-      window.location.reload();
+    if (chestsRef.current.totalChests === openedTotal && moviment.nextMove.door) {
+      gameRef.current.completeLevelPhase();
+      play('victory');
     }
-  });
+  }, documentRef);
 
   return {
     position: positionState,

@@ -1,43 +1,69 @@
 import React from "react";
-import { canvas, handleNextPosition, checkValidMoviment, ECanvas } from "./helpers";
+import { handleNextPosition, checkValidMoviment, ECanvas } from "./helpers";
 
 interface IProps {
   children: React.ReactNode;
+  initialCanvas: number[][];
+}
+
+function cloneCanvas(source: number[][]): number[][] {
+  return source.map(row => [...row]);
 }
 
 export const CanvasContext = React.createContext({
-  canvas: [],
-  updateCanvas: (direction, currentPosition, walker) => null
+  canvas: [] as number[][],
+  updateCanvas: (direction: any, currentPosition: any, walker: any) => null as any,
+  teleportHero: (from: { x: number; y: number }, to: { x: number; y: number }) => {},
 });
 
 function CanvasProvider(props: IProps) {
+  const canvasRef = React.useRef(cloneCanvas(props.initialCanvas));
+
   const [canvasState, updateCanvasState] = React.useState({
-    canvas: canvas,
-    updateCanvas: (direction, currentPosition, walker) => {
+    canvas: cloneCanvas(props.initialCanvas),
+    updateCanvas: (direction: any, currentPosition: any, walker: any) => {
       const nextPosition = handleNextPosition(direction, currentPosition);
-      const nextMove = checkValidMoviment(nextPosition, walker);
+      const nextMove = checkValidMoviment(canvasRef.current, nextPosition, walker);
 
       if (nextMove.valid) {
         updateCanvasState((prevState) => {
-          const newCanvas = Object.assign([], prevState.canvas);
+          const newCanvas = cloneCanvas(prevState.canvas);
           const currentValue = newCanvas[currentPosition.y][currentPosition.x];
 
           newCanvas[currentPosition.y][currentPosition.x] = ECanvas.FLOOR;
           newCanvas[nextPosition.y][nextPosition.x] = currentValue;
 
+          canvasRef.current = newCanvas;
+
           return {
             canvas: newCanvas,
             updateCanvas: prevState.updateCanvas,
+            teleportHero: prevState.teleportHero,
           }
         });
       }
-
 
       return {
         nextPosition,
         nextMove
       }
-    }
+    },
+    teleportHero: (from: { x: number; y: number }, to: { x: number; y: number }) => {
+      updateCanvasState((prevState) => {
+        const newCanvas = cloneCanvas(prevState.canvas);
+
+        newCanvas[from.y][from.x] = ECanvas.FLOOR;
+        newCanvas[to.y][to.x] = ECanvas.HERO;
+
+        canvasRef.current = newCanvas;
+
+        return {
+          canvas: newCanvas,
+          updateCanvas: prevState.updateCanvas,
+          teleportHero: prevState.teleportHero,
+        }
+      });
+    },
   });
 
   return (

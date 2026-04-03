@@ -1,7 +1,6 @@
 import { EDirection, EWalker } from "../../settings/constants";
-import React from "react";
 
-export function handleNextPosition(direction, position) {
+export function handleNextPosition(direction: EDirection, position: { x: number; y: number }) {
   switch(direction) {
     case EDirection.LEFT:
       return { x: position.x - 1, y: position.y };
@@ -25,62 +24,42 @@ export enum ECanvas {
   MINI_DEMON = 4,
   DEMON = 5,
   CHEST = 6,
-  HERO = 7
+  HERO = 7,
+  POWER_UP = 8
 };
 
-const FL = ECanvas.FLOOR;
-const WL = ECanvas.WALL;
-const DR = ECanvas.DOOR;
-const TR = ECanvas.TRAP;
-const MD = ECanvas.MINI_DEMON;
-const DE = ECanvas.DEMON;
-const CH = ECanvas.CHEST;
-const HE = ECanvas.HERO;
+export function checkValidMoviment(canvas: number[][], nextPosition: { x: number; y: number }, walker: EWalker) {
+  if (
+    nextPosition.y < 0 ||
+    nextPosition.y >= canvas.length ||
+    nextPosition.x < 0 ||
+    nextPosition.x >= canvas[nextPosition.y].length
+  ) {
+    return { valid: false, damage: false, chest: false, door: false, powerup: false };
+  }
 
-export const canvas = [
-  [WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, DR, DR, WL, WL, WL, WL, WL],
-  [WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, DR, DR, WL, WL, WL, WL, WL],
-  [WL, FL, FL, WL, FL, FL, FL, FL, WL, FL, FL, FL, FL, FL, FL, FL, WL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, TR, FL, FL, FL, FL, CH, FL, FL, FL, FL, FL, FL, FL, MD, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, TR, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, MD, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, DE, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, MD, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, CH, FL, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, FL, FL, FL, TR, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, HE, WL, FL, FL, FL, FL, FL, FL, FL, CH, FL, FL, FL, FL, FL, TR, FL, FL, WL],
-  [WL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, FL, WL],
-  [WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL, WL]
-];
-
-export function checkValidMoviment(nextPosition, walker) {
   const canvasValue = canvas[nextPosition.y][nextPosition.x];
 
-  const result = walker === EWalker.HERO ? getHeroValidMoves(canvasValue) : getEnemyValidMoves(canvasValue); 
+  const result = walker === EWalker.HERO ? getHeroValidMoves(canvasValue) : getEnemyValidMoves(canvasValue);
   return result;
 }
 
-function getHeroValidMoves(canvasValue) {
+function getHeroValidMoves(canvasValue: number) {
   return {
-    valid: canvasValue === ECanvas.FLOOR || canvasValue === ECanvas.CHEST || canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON,
-    dead: canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON,
+    valid: canvasValue === ECanvas.FLOOR || canvasValue === ECanvas.CHEST || canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON || canvasValue === ECanvas.DOOR || canvasValue === ECanvas.POWER_UP,
+    damage: canvasValue === ECanvas.TRAP || canvasValue === ECanvas.MINI_DEMON || canvasValue === ECanvas.DEMON,
     chest: canvasValue === ECanvas.CHEST,
     door: canvasValue === ECanvas.DOOR,
+    powerup: canvasValue === ECanvas.POWER_UP,
   }
 }
 
-function getEnemyValidMoves(canvasValue) {
+function getEnemyValidMoves(canvasValue: number) {
   return {
     valid: canvasValue === ECanvas.FLOOR || canvasValue === ECanvas.HERO,
-    dead: canvasValue === ECanvas.HERO,
+    damage: canvasValue === ECanvas.HERO,
     chest: false,
     door: false,
+    powerup: false,
   }
 }

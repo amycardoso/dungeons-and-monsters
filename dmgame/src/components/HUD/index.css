@@ -1,0 +1,47 @@
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0d0d1a;
+  border: 2px solid #333;
+  border-bottom: none;
+  padding: 8px 16px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #e0e0e0;
+  box-sizing: border-box;
+}
+
+.hud-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hud-label {
+  white-space: nowrap;
+}
+
+.hud-heart {
+  font-size: 14px;
+}
+
+.hud-heart--full {
+  color: #ff4444;
+}
+
+.hud-heart--empty {
+  color: #555;
+}
+
+.hud-mute {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 4px;
+}
+
+.hud-mute:hover {
+  opacity: 0.7;
+}
