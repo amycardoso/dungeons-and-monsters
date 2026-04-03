@@ -2,6 +2,7 @@ import React from 'react';
 
 interface IProps {
   children: React.ReactNode;
+  totalChests: number;
 }
 
 export const ChestsContext = React.createContext({
@@ -15,7 +16,7 @@ export const ChestsContext = React.createContext({
 
 function ChestsProvider(props: IProps) {
   const [chestsState, updateChestsState] = React.useState({
-    totalChests: 2,
+    totalChests: props.totalChests,
     openedChests: {
       total: 0,
       positions: []

@@ -1,8 +1,9 @@
 import React from "react";
-import { canvas, handleNextPosition, checkValidMoviment, ECanvas } from "./helpers";
+import { handleNextPosition, checkValidMoviment, ECanvas } from "./helpers";
 
 interface IProps {
   children: React.ReactNode;
+  initialCanvas: number[][];
 }
 
 export const CanvasContext = React.createContext({
@@ -11,11 +12,16 @@ export const CanvasContext = React.createContext({
 });
 
 function CanvasProvider(props: IProps) {
+  // Store a mutable reference to the canvas rows so checkValidMoviment
+  // always reads current data (mirrors the original pattern where the
+  // module-level canvas rows were mutated in-place via shallow copies).
+  const canvasRef = React.useRef(props.initialCanvas);
+
   const [canvasState, updateCanvasState] = React.useState({
-    canvas: canvas,
+    canvas: props.initialCanvas,
     updateCanvas: (direction, currentPosition, walker) => {
       const nextPosition = handleNextPosition(direction, currentPosition);
-      const nextMove = checkValidMoviment(nextPosition, walker);
+      const nextMove = checkValidMoviment(canvasRef.current, nextPosition, walker);
 
       if (nextMove.valid) {
         updateCanvasState((prevState) => {
@@ -24,6 +30,8 @@ function CanvasProvider(props: IProps) {
 
           newCanvas[currentPosition.y][currentPosition.x] = ECanvas.FLOOR;
           newCanvas[nextPosition.y][nextPosition.x] = currentValue;
+
+          canvasRef.current = newCanvas;
 
           return {
             canvas: newCanvas,

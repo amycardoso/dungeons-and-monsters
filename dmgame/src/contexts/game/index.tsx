@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -14,7 +15,7 @@ import {
   SHIELD_DURATION,
   SPEED_BOOST_DURATION,
 } from "../../settings/constants";
-import { levels } from "../../settings/levels";
+import { levels, LevelConfig } from "../../settings/levels";
 
 interface GameState {
   phase: EGamePhase;
@@ -29,6 +30,7 @@ interface GameState {
 }
 
 interface GameContextValue extends GameState {
+  levelConfig: LevelConfig;
   startGame: () => void;
   nextLevel: () => void;
   restartGame: () => void;
@@ -53,6 +55,7 @@ const defaultState: GameState = {
 
 export const GameContext = createContext<GameContextValue>({
   ...defaultState,
+  levelConfig: levels[0],
   startGame: () => {},
   nextLevel: () => {},
   restartGame: () => {},
@@ -207,6 +210,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setMuted((prev) => !prev);
   }, []);
 
+  const levelConfig = useMemo(() => levels[currentLevel], [currentLevel]);
+
   const value: GameContextValue = {
     phase,
     currentLevel,
@@ -217,6 +222,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     hasSpeedBoost,
     levelStartTime,
     muted,
+    levelConfig,
     startGame,
     nextLevel,
     restartGame,
