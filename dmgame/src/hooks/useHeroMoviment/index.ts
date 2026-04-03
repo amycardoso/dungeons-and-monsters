@@ -54,6 +54,13 @@ function useHeroMoviment(initialPosition: { x: number; y: number }) {
     if (moviment.nextMove.damage && !gameRef.current.isInvincible) {
       gameRef.current.takeDamage();
       play('damage');
+      // Respawn hero at initial position if still alive (health > 1 because takeDamage already decremented)
+      if (gameRef.current.health > 1) {
+        canvasRef.current.teleportHero(moviment.nextPosition, initialPosition);
+        updatePositionState(initialPosition);
+        positionRef.current = initialPosition;
+        updateDirectionState(EDirection.RIGHT);
+      }
     }
 
     if (moviment.nextMove.powerup) {
