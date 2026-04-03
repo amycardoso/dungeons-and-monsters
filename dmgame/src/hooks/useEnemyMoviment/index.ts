@@ -40,23 +40,30 @@ function useEnemyMoviment(initialPosition: { x: number; y: number }) {
   const [direction, updateDirectionState] = React.useState(EDirection.RIGHT);
   const wasChasingRef = useRef(false);
 
+  const positionRef = useRef(positionState);
+  positionRef.current = positionState;
+
+  const canvasRef = useRef(canvasContext);
+  canvasRef.current = canvasContext;
+
+  const gameRef = useRef(gameContext);
+  gameRef.current = gameContext;
+
   useInterval(function move() {
-    if (gameContext.phase !== EGamePhase.PLAYING) {
+    if (gameRef.current.phase !== EGamePhase.PLAYING) {
       return;
     }
 
     let chosenDirection: EDirection;
 
-    // Try chase logic: find hero and check if within range
-    const heroPos = findHeroPosition(canvasContext.canvas);
-    const isChasing = !!(heroPos && manhattanDistance(positionState, heroPos) <= ENEMY_CHASE_RANGE);
+    const heroPos = findHeroPosition(canvasRef.current.canvas);
+    const isChasing = !!(heroPos && manhattanDistance(positionRef.current, heroPos) <= ENEMY_CHASE_RANGE);
     if (isChasing) {
-      chosenDirection = getChaseDirection(positionState, heroPos!);
+      chosenDirection = getChaseDirection(positionRef.current, heroPos!);
       if (!wasChasingRef.current) {
         play('growl');
       }
     } else {
-      // Random movement (existing logic)
       const random = Math.floor(Math.random() * 4);
       const directionArray = Object.values(EDirection);
       chosenDirection = directionArray[random];
@@ -64,17 +71,18 @@ function useEnemyMoviment(initialPosition: { x: number; y: number }) {
 
     wasChasingRef.current = isChasing;
 
-    const moviment = canvasContext.updateCanvas(chosenDirection, positionState, EWalker.ENEMY);
+    const moviment = canvasRef.current.updateCanvas(chosenDirection, positionRef.current, EWalker.ENEMY);
 
     if (moviment.nextMove.valid) {
       updateDirectionState(chosenDirection);
       updatePositionState(moviment.nextPosition);
+      positionRef.current = moviment.nextPosition;
     }
 
     if (moviment.nextMove.damage) {
-      gameContext.takeDamage();
+      gameRef.current.takeDamage();
     }
-  }, gameContext.levelConfig.enemySpeed);
+  }, gameRef.current.levelConfig.enemySpeed);
 
   return {
     position: positionState,

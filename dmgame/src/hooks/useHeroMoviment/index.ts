@@ -15,52 +15,62 @@ function useHeroMoviment(initialPosition: { x: number; y: number }) {
   const [positionState, updatePositionState] = React.useState(initialPosition);
   const [direction, updateDirectionState] = React.useState(EDirection.RIGHT);
 
+  const positionRef = useRef(positionState);
+  positionRef.current = positionState;
+
+  const canvasRef = useRef(canvasContext);
+  canvasRef.current = canvasContext;
+
+  const chestsRef = useRef(chestsContext);
+  chestsRef.current = chestsContext;
+
+  const gameRef = useRef(gameContext);
+  gameRef.current = gameContext;
+
   const documentRef = useRef<Document>(document);
 
   useEventListener('keydown', (event: KeyboardEvent) => {
-    if (gameContext.phase !== EGamePhase.PLAYING) {
+    if (gameRef.current.phase !== EGamePhase.PLAYING) {
       return;
     }
 
-    const direction = event.key as EDirection;
+    const dir = event.key as EDirection;
 
-    if (direction.indexOf('Arrow') === -1) {
+    if (dir.indexOf('Arrow') === -1) {
       return;
     }
 
     event.preventDefault();
 
-    const moviment = canvasContext.updateCanvas(direction, positionState, EWalker.HERO);
+    const moviment = canvasRef.current.updateCanvas(dir, positionRef.current, EWalker.HERO);
 
     if (moviment.nextMove.valid) {
       updatePositionState(moviment.nextPosition);
-      updateDirectionState(direction);
+      positionRef.current = moviment.nextPosition;
+      updateDirectionState(dir);
       play('footstep');
     }
 
-    if (moviment.nextMove.damage && !gameContext.isInvincible) {
-      gameContext.takeDamage();
+    if (moviment.nextMove.damage && !gameRef.current.isInvincible) {
+      gameRef.current.takeDamage();
       play('damage');
-      // Traps are single-use: when the hero walks onto a trap, updateCanvas
-      // replaces the trap tile with the hero. When the hero moves away, the
-      // tile is set to FLOOR, effectively removing the trap from the map.
     }
 
     if (moviment.nextMove.powerup) {
       const POWER_UP_TYPES = [EPowerUp.HEART, EPowerUp.SHIELD, EPowerUp.SPEED];
       const type = POWER_UP_TYPES[(moviment.nextPosition.x * 7 + moviment.nextPosition.y * 13) % 3];
-      gameContext.collectPowerUp(type);
+      gameRef.current.collectPowerUp(type);
       play('powerup');
     }
 
     if (moviment.nextMove.chest) {
-      chestsContext.updateOpenedChests(moviment.nextPosition);
-      gameContext.addScore(100);
+      chestsRef.current.updateOpenedChests(moviment.nextPosition);
+      gameRef.current.addScore(100);
       play('chest');
     }
 
-    if (chestsContext.totalChests === chestsContext.openedChests.total && moviment.nextMove.door) {
-      gameContext.completeLevelPhase();
+    if (chestsRef.current.totalChests === chestsRef.current.openedChests.total && moviment.nextMove.door) {
+      gameRef.current.completeLevelPhase();
       play('victory');
     }
   }, documentRef);
