@@ -5,11 +5,11 @@ import Board from './Board';
 import ChestsProvider from '../contexts/chests';
 
 function Game() {
-  const { levelConfig } = React.useContext(GameContext);
+  const { levelConfig, currentLevel, phase } = React.useContext(GameContext);
 
   return (
-    <CanvasProvider initialCanvas={levelConfig.map}>
-      <ChestsProvider totalChests={levelConfig.totalChests}>
+    <CanvasProvider key={`canvas-${currentLevel}-${phase}`} initialCanvas={levelConfig.map}>
+      <ChestsProvider key={`chests-${currentLevel}-${phase}`} totalChests={levelConfig.totalChests}>
         {/* <Debugger /> */}
         <Board />
       </ChestsProvider>
