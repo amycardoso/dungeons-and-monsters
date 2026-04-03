@@ -59,25 +59,29 @@ const Board = () => {
     return array;
   }
 
-  function getDoorPosition() {
+  function renderOpenedDoor() {
+    // Find all door tiles to compute center position
     const currentCanvas = canvasContext.canvas;
+    let minX = Infinity, minY = Infinity;
     for (let y = 0; y < currentCanvas.length; y++) {
       for (let x = 0; x < currentCanvas[y].length; x++) {
         if (currentCanvas[y][x] === ECanvas.DOOR) {
-          return { left: x * TILE_SIZE, top: y * TILE_SIZE };
+          if (x < minX) minX = x;
+          if (y < minY) minY = y;
         }
       }
     }
-    return { left: 578, top: 0 }; // fallback to original position
-  }
+    // Center the 192x96 image over the door tiles
+    // The image is 4 tiles wide, door is 2 tiles wide, so offset by 1 tile left
+    const left = minX === Infinity ? 578 : (minX * TILE_SIZE) - TILE_SIZE;
+    const top = minY === Infinity ? 0 : (minY * TILE_SIZE);
 
-  function renderOpenedDoor() {
-    const doorPos = getDoorPosition();
     return (
       <img src="./assets/DOOR-OPEN.png" alt="" style={{
         position: "absolute",
-        left: doorPos.left,
-        top: doorPos.top,
+        left,
+        top,
+        zIndex: 2,
         animation: 'door-pulse 1s ease-in-out infinite',
       }} />
     )
