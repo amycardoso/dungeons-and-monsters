@@ -16,48 +16,42 @@ const Board = () => {
   const canvasContext = React.useContext(CanvasContext);
   const chestsContext = React.useContext(ChestsContext);
 
-  function getCanvasMap() {
-    const array = [];
-    const currentCanvas = canvasContext.canvas;
+  // Memoize initial entity list so moving entities keep stable keys
+  const initialEntities = React.useMemo(() => {
+    const entities: React.ReactNode[] = [];
+    const canvas = canvasContext.canvas;
+    let demonCount = 0;
+    let miniDemonCount = 0;
 
-    for (let y = 0; y < currentCanvas.length; y++) {
-      const canvasY = currentCanvas[y];
+    for (let y = 0; y < canvas.length; y++) {
+      for (let x = 0; x < canvas[y].length; x++) {
+        const val = canvas[y][x];
+        const position = { x, y };
+        const posKey = `${x}-${y}`;
 
-      for (let x = 0; x < canvasY.length; x++) {
-        const canvasYX = canvasY[x];
-
-        const position = { x: x, y: y };
-        const text = canvasYX;
-        const key = `${x}-${y}`;
-
-        if (text === ECanvas.TRAP) {
-          array.push(<Trap key={key} initialPosition={position} />)
+        if (val === ECanvas.TRAP) {
+          entities.push(<Trap key={`trap-${posKey}`} initialPosition={position} />);
         }
-
-        if (text === ECanvas.MINI_DEMON) {
-          array.push(<MiniDemon key={key} initialPosition={position} />)
+        if (val === ECanvas.MINI_DEMON) {
+          entities.push(<MiniDemon key={`mini-demon-${miniDemonCount++}`} initialPosition={position} />);
         }
-
-        if (text === ECanvas.DEMON) {
-          array.push(<Demon key={key} initialPosition={position} />)
+        if (val === ECanvas.DEMON) {
+          entities.push(<Demon key={`demon-${demonCount++}`} initialPosition={position} />);
         }
-
-        if (text === ECanvas.CHEST) {
-          array.push(<Chest key={key} initialPosition={position} />)
+        if (val === ECanvas.CHEST) {
+          entities.push(<Chest key={`chest-${posKey}`} initialPosition={position} />);
         }
-
-        if (text === ECanvas.POWER_UP) {
-          array.push(<PowerUp key={key} initialPosition={position} />)
+        if (val === ECanvas.POWER_UP) {
+          entities.push(<PowerUp key={`powerup-${posKey}`} initialPosition={position} />);
         }
-
-        if (text === ECanvas.HERO) {
-          array.push(<Hero key={key} initialPosition={position} />)
+        if (val === ECanvas.HERO) {
+          entities.push(<Hero key="hero" initialPosition={position} />);
         }
       }
     }
-
-    return array;
-  }
+    return entities;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function renderOpenedDoor() {
     // Find all door tiles to compute center position
@@ -87,11 +81,9 @@ const Board = () => {
     )
   }
 
-  const elements = getCanvasMap();
-
   return (
     <div>
-      {elements}
+      {initialEntities}
 
       {chestsContext.totalChests === chestsContext.openedChests.total && (
         renderOpenedDoor()
