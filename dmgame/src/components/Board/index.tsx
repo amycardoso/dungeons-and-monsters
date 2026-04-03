@@ -10,6 +10,8 @@ import { ECanvas } from '../../contexts/canvas/helpers';
 import { CanvasContext } from '../../contexts/canvas';
 import { ChestsContext } from '../../contexts/chests';
 
+import './index.css';
+
 const Board = () => {
   const canvasContext = React.useContext(CanvasContext);
   const chestsContext = React.useContext(ChestsContext);
@@ -76,6 +78,7 @@ const Board = () => {
         position: "absolute",
         left: doorPos.left,
         top: doorPos.top,
+        animation: 'door-pulse 1s ease-in-out infinite',
       }} />
     )
   }

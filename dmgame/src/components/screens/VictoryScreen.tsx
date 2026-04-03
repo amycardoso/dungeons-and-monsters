@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useEventListener } from 'usehooks-ts';
 import { GameContext } from '../../contexts/game';
+import { useSound } from '../../hooks/useSound';
 import './screens.css';
 
 const VictoryScreen = () => {
   const { score, restartGame } = React.useContext(GameContext);
+  const { play } = useSound();
   const documentRef = React.useRef<Document>(document);
+
+  useEffect(() => {
+    play('victory');
+  }, [play]);
 
   useEventListener('keydown', (event: KeyboardEvent) => {
     if (event.key === 'Enter') {

@@ -4,11 +4,13 @@ import { EDirection, EGamePhase, EPowerUp, EWalker } from '../../settings/consta
 import { CanvasContext } from '../../contexts/canvas';
 import { ChestsContext } from '../../contexts/chests';
 import { GameContext } from '../../contexts/game';
+import { useSound } from '../useSound';
 
 function useHeroMoviment(initialPosition) {
   const canvasContext = React.useContext(CanvasContext);
   const chestsContext = React.useContext(ChestsContext);
   const gameContext = React.useContext(GameContext);
+  const { play } = useSound();
 
   const [positionState, updatePositionState] = React.useState(initialPosition);
   const [direction, updateDirectionState] = React.useState(EDirection.RIGHT);
@@ -31,10 +33,12 @@ function useHeroMoviment(initialPosition) {
     if (moviment.nextMove.valid) {
       updatePositionState(moviment.nextPosition);
       updateDirectionState(direction);
+      play('footstep');
     }
 
     if (moviment.nextMove.damage && !gameContext.isInvincible) {
       gameContext.takeDamage();
+      play('damage');
       // Traps are single-use: when the hero walks onto a trap, updateCanvas
       // replaces the trap tile with the hero. When the hero moves away, the
       // tile is set to FLOOR, effectively removing the trap from the map.
@@ -44,15 +48,18 @@ function useHeroMoviment(initialPosition) {
       const POWER_UP_TYPES = [EPowerUp.HEART, EPowerUp.SHIELD, EPowerUp.SPEED];
       const type = POWER_UP_TYPES[(moviment.nextPosition.x * 7 + moviment.nextPosition.y * 13) % 3];
       gameContext.collectPowerUp(type);
+      play('powerup');
     }
 
     if (moviment.nextMove.chest) {
       chestsContext.updateOpenedChests(moviment.nextPosition);
       gameContext.addScore(100);
+      play('chest');
     }
 
     if (chestsContext.totalChests === chestsContext.openedChests.total && moviment.nextMove.door) {
       gameContext.completeLevelPhase();
+      play('victory');
     }
   }, documentRef);
 

@@ -8,11 +8,23 @@
     }
 }
 
+.hero-sprite {
+    animation: hero-animation 1s steps(4) infinite;
+}
+
 .hero--invincible {
-    animation: hero-flash 0.2s steps(2) infinite, hero-animation 1s steps(4) infinite;
+    animation: hero-animation 1s steps(4) infinite, hero-flash 0.2s steps(2) infinite;
 }
 
 @keyframes hero-flash {
     0% { opacity: 1; }
     50% { opacity: 0.3; }
+}
+
+.hero--shield {
+    box-shadow: 0 0 12px 4px rgba(68, 136, 255, 0.7);
+}
+
+.hero--speed {
+    box-shadow: 0 0 12px 4px rgba(255, 204, 0, 0.7);
 }

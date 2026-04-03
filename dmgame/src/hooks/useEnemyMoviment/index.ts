@@ -1,9 +1,10 @@
 import { useInterval } from 'usehooks-ts';
-import React from 'react';
+import React, { useRef } from 'react';
 import { EDirection, EGamePhase, EWalker, ENEMY_CHASE_RANGE } from '../../settings/constants';
 import { CanvasContext } from '../../contexts/canvas';
 import { GameContext } from '../../contexts/game';
 import { ECanvas } from '../../contexts/canvas/helpers';
+import { useSound } from '../useSound';
 
 function findHeroPosition(canvas: number[][]): { x: number; y: number } | null {
   for (let y = 0; y < canvas.length; y++) {
@@ -34,8 +35,10 @@ function getChaseDirection(enemyPos: { x: number; y: number }, heroPos: { x: num
 function useEnemyMoviment(initialPosition) {
   const canvasContext = React.useContext(CanvasContext);
   const gameContext = React.useContext(GameContext);
+  const { play } = useSound();
   const [positionState, updatePositionState] = React.useState(initialPosition);
   const [direction, updateDirectionState] = React.useState(EDirection.RIGHT);
+  const wasChasingRef = useRef(false);
 
   useInterval(function move() {
     if (gameContext.phase !== EGamePhase.PLAYING) {
@@ -46,14 +49,20 @@ function useEnemyMoviment(initialPosition) {
 
     // Try chase logic: find hero and check if within range
     const heroPos = findHeroPosition(canvasContext.canvas);
-    if (heroPos && manhattanDistance(positionState, heroPos) <= ENEMY_CHASE_RANGE) {
-      chosenDirection = getChaseDirection(positionState, heroPos);
+    const isChasing = !!(heroPos && manhattanDistance(positionState, heroPos) <= ENEMY_CHASE_RANGE);
+    if (isChasing) {
+      chosenDirection = getChaseDirection(positionState, heroPos!);
+      if (!wasChasingRef.current) {
+        play('growl');
+      }
     } else {
       // Random movement (existing logic)
       var random = Math.floor(Math.random() * 4);
       var directionArray = Object.values(EDirection);
       chosenDirection = directionArray[random];
     }
+
+    wasChasingRef.current = isChasing;
 
     const moviment = canvasContext.updateCanvas(chosenDirection, positionState, EWalker.ENEMY);
 

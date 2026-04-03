@@ -8,6 +8,7 @@ import StartScreen from './screens/StartScreen';
 import GameOverScreen from './screens/GameOverScreen';
 import LevelCompleteScreen from './screens/LevelCompleteScreen';
 import VictoryScreen from './screens/VictoryScreen';
+import TouchControls from './TouchControls';
 
 function AppContent() {
   const { phase } = React.useContext(GameContext);
@@ -22,6 +23,7 @@ function AppContent() {
         {phase === EGamePhase.LEVEL_COMPLETE && <LevelCompleteScreen />}
         {phase === EGamePhase.VICTORY && <VictoryScreen />}
       </div>
+      <TouchControls />
     </>
   );
 }
@@ -30,7 +32,9 @@ function App() {
   return (
     <div className="App">
       <GameProvider>
-        <AppContent />
+        <div className="game-container">
+          <AppContent />
+        </div>
       </GameProvider>
     </div>
   );

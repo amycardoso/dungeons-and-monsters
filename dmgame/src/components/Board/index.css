@@ -1,0 +1,4 @@
+@keyframes door-pulse {
+    0%, 100% { filter: drop-shadow(0 0 8px gold); }
+    50% { filter: drop-shadow(0 0 20px gold); }
+}

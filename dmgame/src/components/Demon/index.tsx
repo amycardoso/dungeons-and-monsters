@@ -27,6 +27,7 @@ const Demon = (props: IProps) => {
         backgroundImage: "url(./assets/DEMON.png)",
         backgroundRepeat: 'no-repeat',
         animation: 'demon-animation 1s steps(4) infinite',
+        transition: 'top 0.15s ease, left 0.15s ease',
         transform: `scaleX(${moviment.direction === EDirection.RIGHT ? 1 : -1})`,
       }}
     />
