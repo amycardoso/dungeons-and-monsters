@@ -6,11 +6,6 @@ import { GameContext } from '../../contexts/game';
 import './index.css';
 import useHeroMoviment from '../../hooks/useHeroMoviment';
 
-// const moviment = {
-//   position: { x: 5, y: 5 },
-//   direction: EDirection.RIGHT,
-// };
-
 interface IProps {
   initialPosition: { x: number; y: number }
 }

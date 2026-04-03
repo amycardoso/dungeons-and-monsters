@@ -1,12 +1,6 @@
-import React from 'react';
 import { TILE_SIZE } from '../../settings/constants';
 
 import './index.css';
-
-// const moviment = {
-//   position: { x: 5, y: 5 },
-//   direction: EDirection.RIGHT,
-// };
 
 interface IProps {
   initialPosition: { x: number; y: number }

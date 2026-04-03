@@ -1,4 +1,3 @@
-import React from 'react';
 import { TILE_SIZE } from '../../../settings/constants';
 import { ECanvas } from '../../../contexts/canvas/helpers';
 

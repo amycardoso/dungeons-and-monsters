@@ -32,7 +32,7 @@ function getChaseDirection(enemyPos: { x: number; y: number }, heroPos: { x: num
   }
 }
 
-function useEnemyMoviment(initialPosition) {
+function useEnemyMoviment(initialPosition: { x: number; y: number }) {
   const canvasContext = React.useContext(CanvasContext);
   const gameContext = React.useContext(GameContext);
   const { play } = useSound();
@@ -57,8 +57,8 @@ function useEnemyMoviment(initialPosition) {
       }
     } else {
       // Random movement (existing logic)
-      var random = Math.floor(Math.random() * 4);
-      var directionArray = Object.values(EDirection);
+      const random = Math.floor(Math.random() * 4);
+      const directionArray = Object.values(EDirection);
       chosenDirection = directionArray[random];
     }
 

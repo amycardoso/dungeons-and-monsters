@@ -4,11 +4,6 @@ import { TILE_SIZE } from '../../settings/constants';
 import './index.css';
 import { ChestsContext } from '../../contexts/chests';
 
-// const moviment = {
-//   position: { x: 5, y: 5 },
-//   direction: EDirection.RIGHT,
-// };
-
 interface IProps {
   initialPosition: { x: number; y: number }
 }

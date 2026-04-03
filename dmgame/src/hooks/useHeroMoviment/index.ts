@@ -6,7 +6,7 @@ import { ChestsContext } from '../../contexts/chests';
 import { GameContext } from '../../contexts/game';
 import { useSound } from '../useSound';
 
-function useHeroMoviment(initialPosition) {
+function useHeroMoviment(initialPosition: { x: number; y: number }) {
   const canvasContext = React.useContext(CanvasContext);
   const chestsContext = React.useContext(ChestsContext);
   const gameContext = React.useContext(GameContext);
